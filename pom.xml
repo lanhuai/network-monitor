@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <inceptionYear>2014</inceptionYear>
+  <groupId>com.lanhuai.network</groupId>
+  <artifactId>network-monitor</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- for maven compiler plugin -->
+    <maven_compiler_plugin_version>3.1</maven_compiler_plugin_version>
+    <java_source_version>1.6</java_source_version>
+    <java_target_version>1.6</java_target_version>
+    <file_encoding>UTF-8</file_encoding>
+
+    <maven_resource_plugin_version>2.6</maven_resource_plugin_version>
+    <maven_source_plugin_version>2.2.1</maven_source_plugin_version>
+    <maven_surefire_plugin_version>2.16</maven_surefire_plugin_version>
+    <build_helper_maven_plugin_version>1.8</build_helper_maven_plugin_version>
+    <cobertura_maven_plugin_version>2.6</cobertura_maven_plugin_version>
+    <maven_jar_plugin_version>2.4</maven_jar_plugin_version>
+    <maven_install_plugin_version>2.5.1</maven_install_plugin_version>
+    <maven_deploy_plugin_version>2.7</maven_deploy_plugin_version>
+    <maven_javadoc_plugin_version>2.9</maven_javadoc_plugin_version>
+    <maven_license_puglin_version>1.5</maven_license_puglin_version>
+    <maven_assembly_plugin_version>2.4</maven_assembly_plugin_version>
+    <maven_shade_plugin_version>1.4</maven_shade_plugin_version>
+    <maven_release_plugin_version>2.4.2</maven_release_plugin_version>
+
+    <!-- Project libs -->
+    <netty_version>4.0.20.Final</netty_version>
+    <slf4j_version>1.7.5</slf4j_version>
+    <log4j_version>1.2.17</log4j_version>
+
+    <!-- test libs -->
+    <junit_version>4.11</junit_version>
+    <surefire-junit47_version>2.16</surefire-junit47_version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-handler</artifactId>
+        <version>${netty_version}</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j_version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j_version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${slf4j_version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+
+      <plugins>
+        <!-- compiler 插件 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven_compiler_plugin_version}</version>
+          <configuration>
+            <source>${java_source_version}</source>
+            <target>${java_target_version}</target>
+            <encoding>${file_encoding}</encoding>
+            <showWarnings>true</showWarnings>
+          </configuration>
+        </plugin>
+
+        <!-- resource 插件-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven_resource_plugin_version}</version>
+        </plugin>
+
+        <!-- test 插件，仅测试名称为*Test的类，使用支持分组测试的surefire-junit47 driver -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven_surefire_plugin_version}</version>
+          <configuration>
+            <includes>
+              <include>**/*Test.java</include>
+            </includes>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.surefire</groupId>
+              <artifactId>surefire-junit47</artifactId>
+              <version>${surefire-junit47_version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <!-- 增加更多的Source和Test Source目录插件 -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>${build_helper_maven_plugin_version}</version>
+        </plugin>
+
+        <!-- cobertura 测试覆盖率统计插件 -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>${cobertura_maven_plugin_version}</version>
+        </plugin>
+
+        <!-- jar 打包插件 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven_jar_plugin_version}</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${maven_source_plugin_version}</version>
+        </plugin>
+
+        <!-- assembly 插件 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven_assembly_plugin_version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>${maven_license_puglin_version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${maven_install_plugin_version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${maven_deploy_plugin_version}</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${maven_javadoc_plugin_version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven_shade_plugin_version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>${maven_release_plugin_version}</version>
+        </plugin>
+
+      </plugins>
+
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.lanhuai.network.monitor.MonitorClient</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <attach>true</attach>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagBase>svn://10.0.0.10/SurDoc/distributed-lock/tags</tagBase>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
