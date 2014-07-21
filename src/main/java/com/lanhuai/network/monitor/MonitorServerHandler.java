@@ -25,11 +25,11 @@ public class MonitorServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 //        super.channelRead(ctx, msg);
-        logger.info("Read message from {} : {}", ctx.channel().remoteAddress(), msg);
+        logger.debug("Read message from {} : {}", ctx.channel().remoteAddress(), msg);
 
         String respoMsg = "alive";
         ctx.writeAndFlush(respoMsg + LINE_SEPARATOR);
-        logger.info("Send message to {} : {}", ctx.channel().remoteAddress(), respoMsg);
+        logger.debug("Send message to {} : {}", ctx.channel().remoteAddress(), respoMsg);
     }
 
     @Override

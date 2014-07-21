@@ -45,7 +45,7 @@ public class MonitorClientHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-        logger.info("Read message from {} : {}", ctx.channel().remoteAddress(), msg);
+        logger.debug("Read message from {} : {}", ctx.channel().remoteAddress(), msg);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MonitorClientHandler extends SimpleChannelInboundHandler<String> {
                 logger.error("server {} not active", ctx.channel().remoteAddress());
             } else if (e.state() == IdleState.WRITER_IDLE) {
                 ctx.writeAndFlush("heartbeat" + LINE_SEPARATOR);
-                logger.info("send heartbeat to {}", ctx.channel().remoteAddress());
+                logger.debug("send heartbeat to {}", ctx.channel().remoteAddress());
             }
         }
     }
