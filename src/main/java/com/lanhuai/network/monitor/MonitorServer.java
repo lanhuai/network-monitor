@@ -34,6 +34,9 @@ public class MonitorServer {
 
             ChannelFuture channelFuture = b.bind(port).sync();
             logger.info("Binding to port {}", port);
+
+            runClient();
+
             channelFuture.channel().closeFuture().sync();
             logger.info("Stopping finished!");
 
@@ -53,6 +56,21 @@ public class MonitorServer {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    void runClient() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MonitorClient.main(new String[]{});
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
 
