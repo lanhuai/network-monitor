@@ -9,6 +9,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author <a href="mailto:lanhuai@gmail.com">Ning Yubin</a>
  */
@@ -23,8 +26,27 @@ public class MonitorServer {
     }
 
     public void run() throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(2, new ThreadFactory() {
+            private final AtomicInteger threadIndex = new AtomicInteger(0);
+            private static final int threadTotal = 2;
+
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r,
+                        String.format("NettyBossSelector-%d-%d", threadTotal, threadIndex.incrementAndGet()));
+            }
+        });
+        EventLoopGroup workerGroup = new NioEventLoopGroup(4, new ThreadFactory() {
+            private final AtomicInteger threadIndex = new AtomicInteger(0);
+            private static final int threadTotal = 4;
+
+
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, String.format("NettyServerWorker-%d-%d", threadTotal,
+                        threadIndex.incrementAndGet()));
+            }
+        });
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
