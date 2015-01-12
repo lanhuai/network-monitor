@@ -54,6 +54,7 @@ public class MonitorClientHandler extends SimpleChannelInboundHandler<String> {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.READER_IDLE) {
                 logger.error("server {} not active", ctx.channel().remoteAddress());
+                ctx.close();
             } else if (e.state() == IdleState.WRITER_IDLE) {
                 ctx.writeAndFlush("heartbeat" + LINE_SEPARATOR);
                 logger.debug("send heartbeat to {}", ctx.channel().remoteAddress());
@@ -78,6 +79,11 @@ public class MonitorClientHandler extends SimpleChannelInboundHandler<String> {
                 MonitorClient.connect(MonitorClient.configureBootstrap(new Bootstrap(), loop), host, port);
             }
         }, RECONNECT_DELAY, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("Regist channel {}", ctx.channel());
     }
 
     @Override

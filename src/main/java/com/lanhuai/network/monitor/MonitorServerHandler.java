@@ -38,6 +38,7 @@ public class MonitorServerHandler extends SimpleChannelInboundHandler<String> {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.READER_IDLE) {
                 logger.error("remote client {} not active", ctx.channel().remoteAddress());
+                ctx.close();
             } else if (e.state() == IdleState.WRITER_IDLE) {
                 logger.info("server write idle");
                 ctx.writeAndFlush("test" + LINE_SEPARATOR);
@@ -53,6 +54,11 @@ public class MonitorServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         logger.info("Unregist channel {}", ctx.channel());
+    }
+
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("Regist channel {}", ctx.channel());
     }
 
     @Override
